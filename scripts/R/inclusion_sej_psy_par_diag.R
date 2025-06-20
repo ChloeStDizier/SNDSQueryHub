@@ -98,6 +98,7 @@ for (an in c(annee_debut : annee_fin)) {
       left_join(tbl(conn, paste0("T_RIP", an - 2000, "RSAD")), by = c("ETA_NUM_EPMSI", "RIP_NUM")) %>% 
       filter(ASS_DGN %in% diag_liste | DGN_PAL %in% diag_liste) %>% 
       left_join(tbl(conn, paste0("T_RIP", an - 2000, "FB")), by = c("ETA_NUM_EPMSI", "RIP_NUM")) %>% 
+      select(-EXE_SOI_DTD) %>% 
       left_join(tbl(conn, paste0("T_RIP", an - 2000, "C")), by = c("ETA_NUM_EPMSI", "RIP_NUM")) %>% 
       select(RIP_NUM, ETA_NUM_EPMSI, AGE_ANN, COD_SEX, SEJ_DUR, DGN_PAL, NIR_ANO_17, EXE_SOI_DTD) %>% 
       collect()
