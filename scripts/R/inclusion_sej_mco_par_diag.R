@@ -70,7 +70,7 @@ for (an in c(annee_debut : annee_fin)) {
     select(RSA_NUM, ETA_NUM, AGE_ANN, COD_SEX, SEJ_NBJ, DGN_PAL, NIR_ANO_17,EXE_SOI_DTD) %>% 
     collect() 
   
-  cat("Done")
+  cat("Done\n")
   
   
   # Création du tableau avec une ligne par séjour pour l'année an
