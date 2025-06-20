@@ -27,14 +27,14 @@ source("connect.R")
 ## A compléter 
 
 annee_debut = 
-annee_fin = 
-
-
-# Liste de diagnostics servant de critère d'inclusion
-## A completer 
-## Exemple diag_liste = c("F061", "F202")
+  annee_fin = 
   
-diag_liste = c()
+  
+  # Liste de diagnostics servant de critère d'inclusion
+  ## A completer 
+  ## Exemple diag_liste = c("F061", "F202")
+  
+  diag_liste = c()
 
 
 
@@ -67,8 +67,8 @@ for (an in c(annee_debut : annee_fin)) {
     left_join(tbl(conn, paste0("T_MCO", an - 2000, "D")), by = c("ETA_NUM", "RSA_NUM")) %>% 
     filter(ASS_DGN %in% diag_liste | DGN_PAL %in% diag_liste) %>% 
     left_join(tbl(conn, paste0("T_MCO", an - 2000, "C")), by = c("ETA_NUM", "RSA_NUM")) %>% 
-    collect() %>% 
-    select(RSA_NUM, ETA_NUM, AGE_ANN, COD_SEX, SEJ_NBJ, DGN_PAL, NIR_ANO_17) 
+    select(RSA_NUM, ETA_NUM, AGE_ANN, COD_SEX, SEJ_NBJ, DGN_PAL, NIR_ANO_17,EXE_SOI_DTD) %>% 
+    collect() 
   
   cat("Done")
   
@@ -80,7 +80,8 @@ for (an in c(annee_debut : annee_fin)) {
     group_by(RSA_NUM,ETA_NUM, NIR_ANO_17) %>% 
     summarise(duree = max(SEJ_NBJ, na.rm = T),
               age = max(AGE_ANN, na.rm = T),
-              sexe = max(COD_SEX, na.rm = T)) %>% 
+              sexe = max(COD_SEX, na.rm = T),
+              date = min(EXE_SOI_DTD, na.rm = T)) %>% 
     mutate(annee = an)
   
   cat(paste("Done :", nrow(sej), "séjours en", an, "\n"))

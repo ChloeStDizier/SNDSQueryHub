@@ -72,8 +72,8 @@ for (an in c(annee_debut : annee_fin)) {
       filter(ASS_DGN %in% diag_liste | DGN_PAL %in% diag_liste) %>% 
       left_join(tbl(conn, paste0("T_RIP", an - 2000, "FB")), by = c("ETA_NUM_EPMSI", "RIP_NUM")) %>% 
       left_join(tbl(conn, paste0("T_RIP", an - 2000, "C")), by = c("ETA_NUM_EPMSI", "RIP_NUM")) %>% 
-      collect() %>% 
-      select(RIP_NUM, ETA_NUM_EPMSI, AGE_ANN, COD_SEX, SEJ_DUR, DGN_PAL, NIR_ANO_17) 
+      select(RIP_NUM, ETA_NUM_EPMSI, AGE_ANN, COD_SEX, SEJ_DUR, DGN_PAL, NIR_ANO_17, EXE_SOI_DTD) %>% 
+      collect()
     
     cat("Done")
     
@@ -85,7 +85,8 @@ for (an in c(annee_debut : annee_fin)) {
       group_by(RIP_NUM, ETA_NUM_EPMSI, NIR_ANO_17) %>% 
       summarise(duree = max(SEJ_DUR, na.rm = T),
                 age = max(AGE_ANN, na.rm = T),
-                sexe = max(COD_SEX, na.rm = T)) %>% 
+                sexe = max(COD_SEX, na.rm = T),
+                date = min(EXE_SOI_DTD, na.rm = T)) %>% 
       mutate(annee = an)
     
   } else {
@@ -98,8 +99,9 @@ for (an in c(annee_debut : annee_fin)) {
       filter(ASS_DGN %in% diag_liste | DGN_PAL %in% diag_liste) %>% 
       left_join(tbl(conn, paste0("T_RIP", an - 2000, "FB")), by = c("ETA_NUM_EPMSI", "RIP_NUM")) %>% 
       left_join(tbl(conn, paste0("T_RIP", an - 2000, "C")), by = c("ETA_NUM_EPMSI", "RIP_NUM")) %>% 
-      collect() %>% 
-      select(RIP_NUM, ETA_NUM_EPMSI, AGE_ANN, COD_SEX, DEL_DAT_ENT, DGN_PAL, NIR_ANO_17) 
+      select(RIP_NUM, ETA_NUM_EPMSI, AGE_ANN, COD_SEX, SEJ_DUR, DGN_PAL, NIR_ANO_17, EXE_SOI_DTD) %>% 
+      collect()
+    
     
     cat("Done")
     
@@ -111,7 +113,8 @@ for (an in c(annee_debut : annee_fin)) {
       group_by(RIP_NUM, ETA_NUM_EPMSI, NIR_ANO_17) %>% 
       summarise(duree = max(DEL_DAT_ENT, na.rm = T),
                 age = max(AGE_ANN, na.rm = T),
-                sexe = max(COD_SEX, na.rm = T)) %>% 
+                sexe = max(COD_SEX, na.rm = T), 
+                date = min(EXE_SOI_DTD, na.rm = T)) %>% 
       mutate(annee = an)    
     
   }
